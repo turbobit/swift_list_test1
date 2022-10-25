@@ -14,9 +14,6 @@ struct location {
 struct ContentView: View {
     
     init(){
-        var class1 = classes.
-
-
 ////        let myAppearance = UINavigationBarAppearance()
 //        myAppearance.titleTextAttributes = [
 //            .foregroundColor : UIColor.black,
@@ -45,12 +42,13 @@ struct ContentView: View {
                 }
              
              classTitleData             TET.VAL1('1주차')
+             List(classes){
+                 title in
+                 Text("\(title)")
+                     
+             }
              */
-            List(classes){
-                title in
-                Text("\(title)")
-                    
-            }
+
             List {
                 Section(header: Text("1주차 Class"))
                 {
