@@ -22,7 +22,7 @@
 		1D418BC82905CE670087EBAC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1D418BCA2905CE680087EBAC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D418BCD2905CE680087EBAC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		4C376F8F2907E86F00F14A1D /* classData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = classData.json; path = "../../../../../교재/classData.json"; sourceTree = "<group>"; };
+		4C376F8F2907E86F00F14A1D /* classData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = classData.json; sourceTree = "<group>"; };
 		4C376F912907E93900F14A1D /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
 		4C376F932907E9C600F14A1D /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
