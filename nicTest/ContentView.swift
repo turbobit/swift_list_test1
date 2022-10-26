@@ -12,140 +12,30 @@ struct location {
 }
 
 struct ContentView: View {
+    @ObservedObject var datas = ReadData()
     
+    //루프 돌게 참조 https://developer.apple.com/forums/thread/128145
+    var classesCollatedByTerm: [String : [Classes]] {
+        Dictionary(grouping: datas.classes, by: {$0.Term})
+    }
+    var uniqueClassTerm : [String]{
+        classesCollatedByTerm.map( {$0.key}).sorted()
+    }
     init(){
-        var class1 = classes.
-
-
-////        let myAppearance = UINavigationBarAppearance()
-//        myAppearance.titleTextAttributes = [
-//            .foregroundColor : UIColor.black,
-//                .font : UIFont.boldSystemFont(ofSize: 20)
-//        ]
-//        UINavigationBar.appearance().standardAppearance        = myAppearance
     }
     var body: some View {
         NavigationView {
-            
-            
-            /*
-             terr
-             
-             2차
-             for classTitleData
-                title = 1주차, 2추,3주
-             
-                for classData
-                    if class.title = classTitleData.title {
-                        
-                    }
-                    else
-                    {
-                     }
-                }
-             
-             classTitleData             TET.VAL1('1주차')
-             */
-            List(classes){
-                title in
-                Text("\(title)")
-                    
-            }
             List {
-                Section(header: Text("1주차 Class"))
-                {
-                    NavigationLink(
-                        destination: Text("다음링크"), label: {
-                                Text("ADS")
-                            })
-                    NavigationLink(
-                        destination: Text("다음링"), label: {
-                            Text("App Senario")
-                        })
-                    NavigationLink(
-                        destination: Text("음링크"), label: {
-                            Text("Persona")
-                        })
+              ForEach(uniqueClassTerm, id: \.self) { term in
+                Section(header: Text(term)) {
+                    ForEach(self.classesCollatedByTerm[term]!) { data in
+                        NavigationLink(
+                            destination: Text("다음링크"), label: {
+                                Text( data.Subject)
+                                })
+                    }
                 }
-                
-                Section(header: Text("2주차 Class"),
-                        footer: Text("시나리오와 피드백"))
-                {
-                    NavigationLink(
-                        destination: Text("다음링크"), label: {
-                            Text("유사앱 찾기")
-                            })
-                    NavigationLink(
-                        destination: Text("다음링"), label: {
-                            Text("App SKetch")
-                        })
-                    NavigationLink(
-                        destination: Text("음링크"), label: {
-                            Text("Prototyping")
-                        })
-                }
-
-                Section(header: Text("3주차 Class"),
-                        footer: Text("발표와 동료 찾기")) {
-                    NavigationLink(
-                        destination: Text("다음링크"), label: {
-                            Text("프로토 타입 발표")
-                            })
-                    NavigationLink(
-                        destination: Text("다음링"), label: {
-                            Text("팀 빌딩")
-                        })
-                    NavigationLink(
-                        destination: Text("음링크"), label: {
-                            Text("GitHub")
-                        })
-                }
-                Section(header: Text("4주차 Class"),
-                        footer: Text("시나리오와 피드백")) {
-                    NavigationLink(
-                        destination: Text("다음링크"), label: {
-                            Text("프로토 타입 발표")
-                            })
-                    NavigationLink(
-                        destination: Text("다음링"), label: {
-                            Text("팀 빌딩")
-                        })
-                    NavigationLink(
-                        destination: Text("음링크"), label: {
-                            Text("GitHub")
-                        })
-                }
-                Section(header: Text("5주차 Class"),
-                        footer: Text("--------")) {
-                    NavigationLink(
-                        destination: Text("다음링크"), label: {
-                            Text("프로토 타입 발표")
-                            })
-                    NavigationLink(
-                        destination: Text("다음링"), label: {
-                            Text("팀 빌딩")
-                        })
-                    NavigationLink(
-                        destination: Text("음링크"), label: {
-                            Text("GitHub")
-                        })
-                }
-                Section(header: Text("6주차 Class"),
-                        footer: Text("--------")) {
-                    NavigationLink(
-                        destination: Text("다음링크"), label: {
-                            Text("프로토 타입 발표")
-                            })
-                    NavigationLink(
-                        destination: Text("다음링"), label: {
-                            Text("팀 빌딩")
-                        })
-                    NavigationLink(
-                        destination: Text("음링크"), label: {
-                            Text("GitHub")
-                        })
-                }
-                
+              }
             }//List
     //        .listStyle()
             .navigationTitle("Class")
@@ -157,21 +47,46 @@ struct ContentView: View {
     } // body
 }// ContentView
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+
+/*
+ Read JSON Data From File System in SwiftUI Mobile App
+ https://medium.com/@nutanbhogendrasharma/read-json-data-from-file-system-in-swiftui-d054662000e
+
+ "Term": "1주차",
+ "Subject": "앱 사용 시나리오",
+ "Description": "nil",
+ "URL": "https://miro.com/app/board/uXjVPVZz2QU=/?moveToWidget=3458764533929815341&cot=14"
+ */
+struct Classes: Codable, Identifiable {
+    enum CodingKeys: CodingKey {
+        case Term
+        case Subject
+        case Description
+        case URL
     }
+    
+    var id = UUID()
+    var Term: String
+    var Subject: String
+    var Description: String
+    var URL: String
 }
 
-class tet{
-    func val2(){
-        
+class ReadData: ObservableObject  {
+    @Published var classes = [Classes]()
+    
+    init(){
+        loadData()
     }
-    func val1(){
-        // 1주차 혹은 2추가 같이 검색된거의 결과배열ㄹ 리
-    }
-    init()
-    {
+    func loadData() {
+        guard let url = Bundle.main.url(forResource: "classData", withExtension: "json")
+            else {
+                print("Json file not found")
+                return
+            }
         
+        let data = try? Data(contentsOf: url)
+        let classes = try? JSONDecoder().decode([Classes].self, from: data!)
+        self.classes = classes!
     }
 }
